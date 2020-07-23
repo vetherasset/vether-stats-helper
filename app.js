@@ -2,6 +2,7 @@ require('dotenv').config()
 
 const fs = require('fs')
 const express = require("express")
+const cors = require('cors')
 
 const server = express()
 const port = process.env.PORT ? process.env.PORT : 3000
@@ -74,7 +75,7 @@ const App = async () => {
 
     server.listen(port, () => console.log(`I'm ready on port ${port}.`));
 
-    server.get('/', function (req, res) {
+    server.get('/', cors(), (req, res) => {
         res.sendFile('claimArray.json', { root: __dirname })
     })
 
