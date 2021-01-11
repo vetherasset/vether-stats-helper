@@ -19,8 +19,8 @@ const getData = async () => {
 
     const provider = ethers.getDefaultProvider()
     const contract = new ethers.Contract(vether.addr(), vether.abi(), provider)
-    const currentEra = 1
-    const emission = 2048
+    const currentEra = await contract.currentEra()
+    const emission = 1024
     const currentDay = await contract.currentDay()
     let dayArray = []
     let burntArray = []
