@@ -34,8 +34,10 @@ const getData = async () => {
     let claimedArray = []
 
     console.log(`Now checking for changes.`)
-    for (let i = 1; i <= currentEra; i++) {
-        for (let j = 0; j < currentDay; j++) {
+    let i
+    for (i = 1; i <= currentEra; i++) {
+        let d = i < currentEra ? 244 : currentDay
+        for (j = 0; j <= d; j++) {
             const burntForDay = BN2Int(await contract.mapEraDay_Units(i, j))
             // const unclaimedUnits = BN2Int(await contract.mapEraDay_UnitsRemaining(i, j))
             //const emissionForDay = BN2Int(await contract.mapEraDay_Emission(i, j))
@@ -81,8 +83,8 @@ const App = async () => {
 
     getData()
 
-    setInterval(
-        getData,
+    setInterval(() =>
+        getData(),
         process.env.TIMETOWAIT
     )
 
