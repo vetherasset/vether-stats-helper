@@ -15,7 +15,7 @@ const BN2Int = (BN) => {
     return(((new BigNumber(parseInt(BN._hex, 16))).toFixed()/10**18).toFixed(2))
 }
 
-const getData = async () => {
+const getData = async (init) => {
 
     const provider = ethers.getDefaultProvider()
     const contract = new ethers.Contract(vether.addr(), vether.abi(), provider)
@@ -34,8 +34,10 @@ const getData = async () => {
     let claimedArray = []
 
     console.log(`Now checking for changes.`)
-    for (let i = 1; i <= currentEra; i++) {
-        for (let j = 0; j < currentDay; j++) {
+    e = init ? 1 : currentEra
+    for (i = e; i <= currentEra; i++) {
+        let d = init && i == currentEra ? currentDay : 244
+        for (let j = 0; j < d; j++) {
             const burntForDay = BN2Int(await contract.mapEraDay_Units(i, j))
             // const unclaimedUnits = BN2Int(await contract.mapEraDay_UnitsRemaining(i, j))
             //const emissionForDay = BN2Int(await contract.mapEraDay_Emission(i, j))
@@ -79,10 +81,10 @@ const App = async () => {
         res.sendFile('claimArray.json', { root: __dirname })
     })
 
-    getData()
+    getData(true)
 
-    setInterval(
-        getData,
+    setInterval(() =>
+        getData(false),
         process.env.TIMETOWAIT
     )
 
