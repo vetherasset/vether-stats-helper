@@ -20,7 +20,6 @@ const getData = async () => {
     const provider = ethers.getDefaultProvider()
     const contract = new ethers.Contract(vether.addr(), vether.abi(), provider)
     const currentEra = await contract.currentEra()
-    const emission = 1024
     const currentDay = await contract.currentDay()
     let dayArray = []
     let burntArray = []
@@ -35,8 +34,15 @@ const getData = async () => {
 
     console.log(`Now checking for changes.`)
     let i
+    let d
+    let emission
     for (i = 1; i <= currentEra; i++) {
-        let d = i < currentEra ? 244 : currentDay
+        d = i < currentEra ? 244 : currentDay
+        if (i === 1) {
+            emission = 2048
+        } else if (i > 1) {
+            emission = emission / 2
+        }
         for (j = 0; j <= d; j++) {
             const burntForDay = BN2Int(await contract.mapEraDay_Units(i, j))
             // const unclaimedUnits = BN2Int(await contract.mapEraDay_UnitsRemaining(i, j))
